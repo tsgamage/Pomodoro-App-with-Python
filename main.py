@@ -59,6 +59,7 @@ def reset():
     global loop_time, check_marks, timer_text, timer
 
     window.after_cancel(timer)
+    toggle_reset_btn()
     toggle_start_btn()
 
     header_text.config(text="Ready to Focus?")
@@ -78,6 +79,13 @@ def toggle_start_btn():
         start_btn.config(state="normal", bg=PINK, fg='white', text="Start")
         _started = True
 
+def toggle_reset_btn():
+    global _started
+    if _started:
+        reset_btn.config(state="normal", bg=PINK, fg='white')
+    else:
+        reset_btn.config(state="disabled", bg='white')
+
 
 def call_timer():
     global loop_time, check_marks
@@ -87,6 +95,7 @@ def call_timer():
     window.attributes("-topmost", False)
 
     if _started:
+        toggle_reset_btn()
         toggle_start_btn()
 
     if loop_time == 8:
@@ -142,8 +151,8 @@ start_btn.config(width=10, height=1, font=(FONT_NAME, 18), bg=PINK, fg='white', 
 start_btn.grid(row=3, column=0, padx=5, pady=10)
 
 reset_btn = Button(text="Reset")
-reset_btn.config(width=10, height=1, font=(FONT_NAME, 18), bg=PINK, fg='white', activebackground=DARK_PINK,
-                 activeforeground='white', command=reset)
+reset_btn.config(width=10, height=1, font=(FONT_NAME, 18), fg='white', activebackground=DARK_PINK,
+                 activeforeground='white', command=reset, state="disabled", bg='white')
 reset_btn.grid(row=3, column=1, padx=5, pady=10)
 
 window.mainloop()
