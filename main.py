@@ -56,11 +56,12 @@ def timer(count):
 def reset():
     global _is_running, loop_time, check_marks, timer_text
 
+    _is_running = False
+
     header_text.config(text="Ready to Focus?")
     canvas.itemconfig(timer_text, text="00:00")
     checkmark_label.config(text="")
     change_color(BLUE)
-    _is_running = False
     loop_time = 0
     check_marks = ""
 
@@ -71,23 +72,18 @@ def call_timer():
     _is_running = True
     loop_time += 1
 
-    print(f"loop_time: {loop_time}")
-
     if loop_time == 8:
-        print(f"called", 3)
         timer(LONG_BREAK_SEC)
         change_color(YELLOW)
         check_marks = ''
         header_text.config(text="Take a Long Break!")
 
     elif loop_time % 2 == 0:
-        print(f"called", 2)
         timer(SMALL_BREAK_SEC)
         change_color(PURPLE)
         header_text.config(text="Take a Little Break!")
 
     elif loop_time % 2 == 1:
-        print(f"called", 1)
         timer(WORKING_TIME_SEC)
         change_color(GREEN)
         check_marks += '🔥'  # ✔
