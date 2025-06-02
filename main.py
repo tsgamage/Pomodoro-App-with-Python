@@ -52,6 +52,19 @@ def timer(count):
         else:
             call_timer()
 
+
+def reset():
+    global _is_running, loop_time, check_marks, timer_text
+
+    header_text.config(text="Ready to Focus?")
+    canvas.itemconfig(timer_text, text="00:00")
+    checkmark_label.config(text="")
+    change_color(BLUE)
+    _is_running = False
+    loop_time = 0
+    check_marks = ""
+
+
 def call_timer():
     global loop_time, check_marks, _is_running
 
@@ -117,7 +130,7 @@ start_btn.grid(row=3, column=0, padx=5, pady=10)
 
 reset_btn = Button(text="Reset")
 reset_btn.config(width=10, height=1, font=(FONT_NAME, 18), bg=PINK, fg='white', activebackground=DARK_PINK,
-                 activeforeground='white')
+                 activeforeground='white', command=reset)
 reset_btn.grid(row=3, column=1, padx=5, pady=10)
 
 window.mainloop()
