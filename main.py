@@ -7,20 +7,20 @@ DARK_PINK = "#F72C5B"
 
 BLUE = "#77CDFF"
 GREEN = "#7aff77"
-PURPLE = "#D895DA"
 YELLOW = "#ffe777"
-ORANGE = "#ff9600"
+PURPLE = "#D895DA"
+CHECKMARK_COLOR = "#1B3C73"
 
 NUM_FONT_NAME = "Courier"
-FONT_NAME = "montserrat"
+TEXT_FONT_NAME = "montserrat"
 
 WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 
-WORKING_TIME_SEC = 10
-SMALL_BREAK_SEC = 10
-LONG_BREAK_SEC = 10
+WORKING_TIME_SEC = WORK_MIN * 60
+SMALL_BREAK_SEC = SHORT_BREAK_MIN * 60
+LONG_BREAK_SEC = LONG_BREAK_MIN * 60
 
 _started = True
 loop_time = 0
@@ -33,7 +33,6 @@ def change_color(color):
     canvas.config(bg=color)
     header_text.config(bg=color)
     checkmark_label.config(bg=color)
-
 
 def timer_counter(count):
     timer_min = math.floor(count / 60)
@@ -54,7 +53,6 @@ def timer_counter(count):
         window.attributes("-topmost", True)
         call_timer()
 
-
 def reset():
     global loop_time, check_marks, timer_text, timer
 
@@ -68,7 +66,6 @@ def reset():
     change_color(BLUE)
     loop_time = 0
     check_marks = ""
-
 
 def toggle_start_btn():
     global _started
@@ -85,7 +82,6 @@ def toggle_reset_btn():
         reset_btn.config(state="normal", bg=PINK, fg='white')
     else:
         reset_btn.config(state="disabled", bg='white')
-
 
 def call_timer():
     global loop_time, check_marks
@@ -131,27 +127,27 @@ window.grid_columnconfigure(0, weight=1)
 window.grid_columnconfigure(1, weight=1)
 
 header_text = Label(text="Ready to Focus?")
-header_text.config(font=(FONT_NAME, 20), bg=BLUE, )
+header_text.config(font=(TEXT_FONT_NAME, 20), bg=BLUE, )
 header_text.grid(row=0, column=0, columnspan=2)
 
 canvas = Canvas()
 canvas.config(bg=BLUE, width=250, height=224, highlightthickness=0)
-tomato_image = PhotoImage(file="./assets/tomato.png")
-canvas.create_image(125, 112, image=tomato_image)
-timer_text = canvas.create_text(125, 130, text="00:00", font=(FONT_NAME, 36), fill="white")
+TOMATO_IMAGE = PhotoImage(file="./assets/tomato.png")
+canvas.create_image(125, 112, image=TOMATO_IMAGE)
+timer_text = canvas.create_text(125, 130, text="00:00", font=(TEXT_FONT_NAME, 36), fill="white")
 canvas.grid(row=1, column=0, columnspan=2)
 
 checkmark_label = Label(text="")
-checkmark_label.config(font=(FONT_NAME, 18), bg=BLUE, fg='#1B3C73')
+checkmark_label.config(font=(TEXT_FONT_NAME, 18), bg=BLUE, fg=CHECKMARK_COLOR)
 checkmark_label.grid(row=2, column=0, columnspan=2, pady=(10, 0))
 
 start_btn = Button(text="Start")
-start_btn.config(width=10, height=1, font=(FONT_NAME, 18), bg=PINK, fg='white', activebackground=DARK_PINK,
+start_btn.config(width=10, height=1, font=(TEXT_FONT_NAME, 18), bg=PINK, fg='white', activebackground=DARK_PINK,
                  activeforeground='white', command=call_timer)
 start_btn.grid(row=3, column=0, padx=5, pady=10)
 
 reset_btn = Button(text="Reset")
-reset_btn.config(width=10, height=1, font=(FONT_NAME, 18), fg='white', activebackground=DARK_PINK,
+reset_btn.config(width=10, height=1, font=(TEXT_FONT_NAME, 18), fg='white', activebackground=DARK_PINK,
                  activeforeground='white', command=reset, state="disabled", bg='white')
 reset_btn.grid(row=3, column=1, padx=5, pady=10)
 
