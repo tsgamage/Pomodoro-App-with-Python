@@ -18,11 +18,11 @@ WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 
-WORKING_TIME_SEC = 2
-SMALL_BREAK_SEC = 2
-LONG_BREAK_SEC = 5
+WORKING_TIME_SEC = 10
+SMALL_BREAK_SEC = 10
+LONG_BREAK_SEC = 10
 
-_is_running = True
+_started = True
 loop_time = 0
 check_marks = ""
 timer = None
@@ -51,6 +51,7 @@ def timer_counter(count):
         global timer
         timer = window.after(1000, timer_counter, count - 1)
     else:
+        window.attributes("-topmost", True)
         call_timer()
 
 
@@ -58,6 +59,7 @@ def reset():
     global loop_time, check_marks, timer_text, timer
 
     window.after_cancel(timer)
+    toggle_start_btn()
 
     header_text.config(text="Ready to Focus?")
     canvas.itemconfig(timer_text, text="00:00")
@@ -67,11 +69,25 @@ def reset():
     check_marks = ""
 
 
-def call_timer():
-    global loop_time, check_marks, _is_running
+def toggle_start_btn():
+    global _started
+    if _started:
+        start_btn.config(state="disabled", bg='white', text="Started")
+        _started = False
+    else:
+        start_btn.config(state="normal", bg=PINK, fg='white', text="Start")
+        _started = True
 
-    _is_running = True
+
+def call_timer():
+    global loop_time, check_marks
+
     loop_time += 1
+
+    window.attributes("-topmost", False)
+
+    if _started:
+        toggle_start_btn()
 
     if loop_time == 8:
         timer_counter(LONG_BREAK_SEC)
