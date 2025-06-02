@@ -25,6 +25,7 @@ LONG_BREAK_SEC = 5
 _is_running = True
 loop_time = 0
 check_marks = ""
+timer = None
 
 
 def change_color(color):
@@ -34,29 +35,29 @@ def change_color(color):
     checkmark_label.config(bg=color)
 
 
-def timer(count):
-    if _is_running:
-        timer_min = math.floor(count / 60)
-        timer_sec = count % 60
+def timer_counter(count):
+    timer_min = math.floor(count / 60)
+    timer_sec = count % 60
 
-        if timer_min < 10:
-            timer_min = f"0{timer_min}"
-        if timer_sec < 10:
-            timer_sec = f"0{timer_sec}"
-        if timer_sec == 0:
-            timer_sec = "00"
+    if timer_min < 10:
+        timer_min = f"0{timer_min}"
+    if timer_sec < 10:
+        timer_sec = f"0{timer_sec}"
+    if timer_sec == 0:
+        timer_sec = "00"
 
-        canvas.itemconfig(timer_text, text=f"{timer_min}:{timer_sec}")
-        if count > 0:
-            window.after(1000, timer, count - 1)
-        else:
-            call_timer()
+    canvas.itemconfig(timer_text, text=f"{timer_min}:{timer_sec}")
+    if count > 0:
+        global timer
+        timer = window.after(1000, timer_counter, count - 1)
+    else:
+        call_timer()
 
 
 def reset():
-    global _is_running, loop_time, check_marks, timer_text
+    global loop_time, check_marks, timer_text, timer
 
-    _is_running = False
+    window.after_cancel(timer)
 
     header_text.config(text="Ready to Focus?")
     canvas.itemconfig(timer_text, text="00:00")
@@ -73,18 +74,18 @@ def call_timer():
     loop_time += 1
 
     if loop_time == 8:
-        timer(LONG_BREAK_SEC)
+        timer_counter(LONG_BREAK_SEC)
         change_color(YELLOW)
         check_marks = ''
         header_text.config(text="Take a Long Break!")
 
     elif loop_time % 2 == 0:
-        timer(SMALL_BREAK_SEC)
+        timer_counter(SMALL_BREAK_SEC)
         change_color(PURPLE)
         header_text.config(text="Take a Little Break!")
 
     elif loop_time % 2 == 1:
-        timer(WORKING_TIME_SEC)
+        timer_counter(WORKING_TIME_SEC)
         change_color(GREEN)
         check_marks += '🔥'  # ✔
         checkmark_label.config(text=check_marks)
